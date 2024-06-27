@@ -1,19 +1,23 @@
 {
     "configurations": [
         {
-            "name": "switch",
+            "name": "DKP Aarch64",
             "includePath": [
-                "${default}",
                 "${workspaceFolder}/**",
-                "${DEVKITPRO}/libnx/include/",
-                "${DEVKITPRO}/portlibs/switch/include/",
-                "${workspaceFolder}/overlay/libtesla/include",
-                "${workspaceFolder}/common"
+                "c:/devkitPro/**",
+                "c:/GitHub/capstone/**",
+                "c:/GitHub/keystone/**"
             ],
-            "defines": [],
-            "cStandard": "c17",
-            "cppStandard": "c++23",
-            "compilerPath": "${DEVKITPRO}/devkitA64/bin/aarch64-none-elf-gcc"
+            "defines": [
+                "DEBUG",
+                "SWITCH",
+                "__SWITCH__"
+            ],
+            "compilerPath": "c:/devkitPro/devkitA64/bin/aarch64-none-elf-g++",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64",
+            "compilerArgs": []
         }
     ],
     "version": 4

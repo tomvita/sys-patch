@@ -1,0 +1,179 @@
+make.exe --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/c/GitHub/Breeze'
+ 
+mkdir -p romfs/shaders
+echo {frag} fill_aa_fsh.glsl
+uam -s frag -o romfs/shaders/fill_aa_fsh.dksh /c/GitHub/Breeze/nanovg/shaders/fill_aa_fsh.glsl
+ 
+echo {frag} fill_fsh.glsl
+uam -s frag -o romfs/shaders/fill_fsh.dksh /c/GitHub/Breeze/nanovg/shaders/fill_fsh.glsl
+ 
+echo {vert} fill_vsh.glsl
+uam -s vert -o romfs/shaders/fill_vsh.dksh /c/GitHub/Breeze/nanovg/shaders/fill_vsh.glsl
+mkdir -p build
+make -C nanovg 
+ 
+make[1]: Entering directory '/c/GitHub/Breeze/nanovg'
+ 
+[ -d lib ] || mkdir -p lib
+ 
+[ -d release ] || mkdir -p release
+ 
+make BUILD=release OUTPUT=/c/GitHub/Breeze/nanovg/lib/libnanovg.a \
+BUILD_CFLAGS="-DNDEBUG=1 -O2" \
+DEPSDIR=/c/GitHub/Breeze/nanovg/release \
+--no-print-directory -C release \
+-f /c/GitHub/Breeze/nanovg/Makefile
+ 
+echo dk_renderer.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/nanovg/release/dk_renderer.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/nanovg/include -I/c/GitHub/Breeze/nanovg/include/nanovg -I/c/GitHub/Breeze/nanovg/include/nanovg/framework -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -c /c/GitHub/Breeze/nanovg/source/dk_renderer.cpp -o dk_renderer.o 
+ 
+echo CApplication.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/nanovg/release/CApplication.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/nanovg/include -I/c/GitHub/Breeze/nanovg/include/nanovg -I/c/GitHub/Breeze/nanovg/include/nanovg/framework -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -c /c/GitHub/Breeze/nanovg/source/framework/CApplication.cpp -o CApplication.o 
+ 
+echo CExternalImage.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/nanovg/release/CExternalImage.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/nanovg/include -I/c/GitHub/Breeze/nanovg/include/nanovg -I/c/GitHub/Breeze/nanovg/include/nanovg/framework -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -c /c/GitHub/Breeze/nanovg/source/framework/CExternalImage.cpp -o CExternalImage.o 
+ 
+echo CIntrusiveTree.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/nanovg/release/CIntrusiveTree.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/nanovg/include -I/c/GitHub/Breeze/nanovg/include/nanovg -I/c/GitHub/Breeze/nanovg/include/nanovg/framework -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -c /c/GitHub/Breeze/nanovg/source/framework/CIntrusiveTree.cpp -o CIntrusiveTree.o 
+ 
+echo CMemPool.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/nanovg/release/CMemPool.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/nanovg/include -I/c/GitHub/Breeze/nanovg/include/nanovg -I/c/GitHub/Breeze/nanovg/include/nanovg/framework -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -c /c/GitHub/Breeze/nanovg/source/framework/CMemPool.cpp -o CMemPool.o 
+ 
+echo CShader.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/nanovg/release/CShader.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/nanovg/include -I/c/GitHub/Breeze/nanovg/include/nanovg -I/c/GitHub/Breeze/nanovg/include/nanovg/framework -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -c /c/GitHub/Breeze/nanovg/source/framework/CShader.cpp -o CShader.o 
+ 
+echo FileLoader.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/nanovg/release/FileLoader.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/nanovg/include -I/c/GitHub/Breeze/nanovg/include/nanovg -I/c/GitHub/Breeze/nanovg/include/nanovg/framework -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -c /c/GitHub/Breeze/nanovg/source/framework/FileLoader.cpp -o FileLoader.o 
+ 
+echo nanovg.c
+aarch64-none-elf-gcc -MMD -MP -MF /c/GitHub/Breeze/nanovg/release/nanovg.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/nanovg/include -I/c/GitHub/Breeze/nanovg/include/nanovg -I/c/GitHub/Breeze/nanovg/include/nanovg/framework -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg/build -D__SWITCH__ -c /c/GitHub/Breeze/nanovg/source/nanovg.c -o nanovg.o 
+ 
+echo libnanovg.a
+rm -f /c/GitHub/Breeze/nanovg/lib/libnanovg.a
+aarch64-none-elf-gcc-ar -rc /c/GitHub/Breeze/nanovg/lib/libnanovg.a dk_renderer.o CApplication.o CExternalImage.o CIntrusiveTree.o CMemPool.o CShader.o FileLoader.o nanovg.o
+ 
+make[1]: Leaving directory '/c/GitHub/Breeze/nanovg'
+ 
+make --no-print-directory -C build -f /c/GitHub/Breeze/Makefile
+ 
+echo SEconfig.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/SEconfig.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/SEconfig.cpp -o SEconfig.o 
+ 
+echo action.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/action.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/action.cpp -o action.o 
+ 
+echo assembleraction.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/assembleraction.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/assembleraction.cpp -o assembleraction.o 
+ 
+echo bookmark.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/bookmark.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/bookmark.cpp -o bookmark.o 
+ 
+echo breezeactions.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/breezeactions.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/breezeactions.cpp -o breezeactions.o 
+ 
+echo breezefiles.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/breezefiles.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/breezefiles.cpp -o breezefiles.o 
+ 
+echo candidates.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/candidates.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/candidates.cpp -o candidates.o 
+ 
+echo copypastemenu.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/copypastemenu.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/copypastemenu.cpp -o copypastemenu.o 
+ 
+echo download.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/download.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/download.cpp -o download.o 
+ 
+echo ezsetup.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/ezsetup.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/ezsetup.cpp -o ezsetup.o 
+ 
+echo help.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/help.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/help.cpp -o help.o 
+ 
+echo lz.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/lz.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/lz.cpp -o lz.o 
+ 
+echo main.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/main.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/main.cpp -o main.o 
+ 
+echo memory_edit.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/memory_edit.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/memory_edit.cpp -o memory_edit.o 
+ 
+echo newmenu.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/newmenu.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/newmenu.cpp -o newmenu.o 
+ 
+echo search.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/search.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/search.cpp -o search.o 
+ 
+echo search_stack.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/search_stack.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/search_stack.cpp -o search_stack.o 
+ 
+echo searchmanager.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/searchmanager.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/searchmanager.cpp -o searchmanager.o 
+ 
+echo searchresult.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/searchresult.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/searchresult.cpp -o searchresult.o 
+ 
+echo segmap.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/segmap.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/segmap.cpp -o segmap.o 
+ 
+echo setting.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/setting.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/setting.cpp -o setting.o 
+ 
+echo ui.cpp
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/ui.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/ui.cpp -o ui.o 
+ 
+echo ui_util.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/ui_util.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/source/ui_util.cpp -o ui_util.o 
+ 
+echo CDirEntry.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/CDirEntry.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/minizip/source2/CDirEntry.cpp -o CDirEntry.o 
+ 
+echo tools.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/tools.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/minizip/source2/tools.cpp -o tools.o 
+ 
+echo unzip1.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/unzip1.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/minizip/source2/unzip1.cpp -o unzip1.o 
+ 
+echo unzipper.cpp
+ 
+aarch64-none-elf-g++ -MMD -MP -MF /c/GitHub/Breeze/build/unzipper.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -std=gnu++17 -fno-exceptions -fno-rtti -fexceptions   -c /c/GitHub/Breeze/minizip/source2/unzipper.cpp -o unzipper.o 
+ 
+echo dmntcht.c
+ 
+aarch64-none-elf-gcc -MMD -MP -MF /c/GitHub/Breeze/build/dmntcht.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -c /c/GitHub/Breeze/source/dmntcht.c -o dmntcht.o 
+ 
+echo ioapi.c
+aarch64-none-elf-gcc -MMD -MP -MF /c/GitHub/Breeze/build/ioapi.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -c /c/GitHub/Breeze/minizip/source2/ioapi.c -o ioapi.o 
+ 
+echo unzip.c
+ 
+aarch64-none-elf-gcc -MMD -MP -MF /c/GitHub/Breeze/build/unzip.d -g -Wall -O2 -ffunction-sections -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE  -I/c/GitHub/Breeze/include -I/c/GitHub/Breeze/../include -I/c/GitHub/Breeze/minizip/include -I/c/GitHub/Breeze/libs/nlohmann -I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/libnx/include -I/c/GitHub/Breeze/nanovg//include -I/c/GitHub/Breeze/build -D__SWITCH__ -c /c/GitHub/Breeze/minizip/source2/unzip.c -o unzip.o 
+echo linking Breeze.elf
+aarch64-none-elf-g++ -specs=/opt/devkitpro/libnx/switch.specs -g -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE -Wl,-Map,Breeze.map  SEconfig.o action.o assembleraction.o bookmark.o breezeactions.o breezefiles.o candidates.o copypastemenu.o download.o ezsetup.o help.o lz.o main.o memory_edit.o newmenu.o search.o search_stack.o searchmanager.o searchresult.o segmap.o setting.o ui.o ui_util.o CDirEntry.o tools.o unzip1.o unzipper.o dmntcht.o ioapi.o unzip.o  -L/opt/devkitpro/portlibs/switch/lib -L/opt/devkitpro/libnx/lib -L/c/GitHub/Breeze/nanovg//lib -lnanovg -ldeko3d -lnx `curl-config --libs` -o /c/GitHub/Breeze/Breeze.elf
+aarch64-none-elf-gcc-nm -CSn /c/GitHub/Breeze/Breeze.elf > Breeze.lst
+ 
+nacptool --create "a game cheating tool" "Tomvita" "Beta 40" /c/GitHub/Breeze/Breeze.nacp 
+echo built ... Breeze.nacp
+ 
+elf2nro /c/GitHub/Breeze/Breeze.elf /c/GitHub/Breeze/Breeze.nro --icon=/c/GitHub/Breeze/icon.jpg --nacp=/c/GitHub/Breeze/Breeze.nacp --romfsdir=/c/GitHub/Breeze/romfs
+echo built ... Breeze.nro
+ 
+make: Leaving directory '/c/GitHub/Breeze'
+ 

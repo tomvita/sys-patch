@@ -186,6 +186,7 @@ constexpr auto ctest_cond(u32 inst) -> bool {
 // to view patches, use https://armconverter.com/?lock=arm64
 constexpr PatchData ret0_patch_data{ "0xE0031F2A" };
 constexpr PatchData ret1_patch_data{ "0x10000014" }; //b #0x40
+constexpr PatchData debug_flag_patch_data{ "0xC9F8FF54" }; // b.ls #0xffffffffffffff18
 constexpr PatchData erpt_patch_data{ "0xE0031F2AC0035FD6" };
 constexpr PatchData nop_patch_data{ "0x1F2003D5" };
 constexpr PatchData mov0_patch_data{ "0xE0031FAA" };
@@ -193,6 +194,7 @@ constexpr PatchData ctest_patch_data{ "0x00309AD2001EA1F2610100D4E0031FAAC0035FD
 
 constexpr auto ret0_patch(u32 inst) -> PatchData { return ret0_patch_data; }
 constexpr auto ret1_patch(u32 inst) -> PatchData { return ret1_patch_data; }
+constexpr auto debug_flag_patch(u32 inst) -> PatchData { return debug_flag_patch_data; }
 constexpr auto erpt_patch(u32 inst) -> PatchData { return erpt_patch_data; }
 constexpr auto nop_patch(u32 inst) -> PatchData { return nop_patch_data; }
 constexpr auto subs_patch(u32 inst) -> PatchData { return subi_cond(inst) ? (u8)0x1 : (u8)0x0; }
@@ -211,6 +213,10 @@ constexpr auto ret0_applied(const u8* data, u32 inst) -> bool {
 
 constexpr auto ret1_applied(const u8* data, u32 inst) -> bool {
     return ret1_patch(inst).cmp(data);
+}
+
+constexpr auto debug_flag_applied(const u8* data, u32 inst) -> bool {
+    return debug_flag_patch(inst).cmp(data);
 }
 
 constexpr auto erpt_applied(const u8* data, u32 inst) -> bool {
@@ -255,6 +261,7 @@ constinit Patterns fs_patterns[] = {
 
 constinit Patterns ldr_patterns[] = {
     { "noacidsigchk", "0xFD7B.A8C0035FD6", 16, 2, subs_cond, subs_patch, subs_applied, true },
+    { "debug_flag", "0x6022403900010035", -4, 0, no_cond, debug_flag_patch, debug_flag_applied, true },
 };
 
 constinit Patterns erpt_patterns[] = {

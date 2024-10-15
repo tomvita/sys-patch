@@ -185,12 +185,14 @@ constexpr auto ctest_cond(u32 inst) -> bool {
 
 // to view patches, use https://armconverter.com/?lock=arm64
 constexpr PatchData ret0_patch_data{ "0xE0031F2A" };
+constexpr PatchData ret1_patch_data{ "0x10000014" }; //b #0x40
 constexpr PatchData erpt_patch_data{ "0xE0031F2AC0035FD6" };
 constexpr PatchData nop_patch_data{ "0x1F2003D5" };
 constexpr PatchData mov0_patch_data{ "0xE0031FAA" };
 constexpr PatchData ctest_patch_data{ "0x00309AD2001EA1F2610100D4E0031FAAC0035FD6" };
 
 constexpr auto ret0_patch(u32 inst) -> PatchData { return ret0_patch_data; }
+constexpr auto ret1_patch(u32 inst) -> PatchData { return ret1_patch_data; }
 constexpr auto erpt_patch(u32 inst) -> PatchData { return erpt_patch_data; }
 constexpr auto nop_patch(u32 inst) -> PatchData { return nop_patch_data; }
 constexpr auto subs_patch(u32 inst) -> PatchData { return subi_cond(inst) ? (u8)0x1 : (u8)0x0; }
@@ -205,6 +207,10 @@ constexpr auto b_patch(u32 inst) -> PatchData {
 
 constexpr auto ret0_applied(const u8* data, u32 inst) -> bool {
     return ret0_patch(inst).cmp(data);
+}
+
+constexpr auto ret1_applied(const u8* data, u32 inst) -> bool {
+    return ret1_patch(inst).cmp(data);
 }
 
 constexpr auto erpt_applied(const u8* data, u32 inst) -> bool {
@@ -243,6 +249,8 @@ constinit Patterns fs_patterns[] = {
     { "noncasigchk_new2", "0x258052", -5, 0, tbz_cond, nop_patch, nop_applied, true, MAKEHOSVERSION(17,0,0) },
     { "nocntchk_old", "0x081C00121F05007181000054", -4, 0, bl_cond, ret0_patch, ret0_applied, true, MAKEHOSVERSION(10,0,0), MAKEHOSVERSION(14,2,1) },
     { "nocntchk_new", "0x081C00121F05007141010054", -4, 0, bl_cond, ret0_patch, ret0_applied, true, MAKEHOSVERSION(15,0,0) },
+    { "nocntchk_FW19_1", "0xC003005401", 0, 0, bne_cond, ret1_patch, ret1_applied, true, MAKEHOSVERSION(19,0,0) },
+    { "nocntchk_FW19_2", "0x1C0012.050071..0054..00.60", -9, 0, bl_cond, ret0_patch, ret0_applied, true, MAKEHOSVERSION(19,0,0) },
 };
 
 constinit Patterns ldr_patterns[] = {
@@ -262,6 +270,7 @@ constinit Patterns es_patterns[] = {
     { "es6", "0x.6300...0094A0..D1..FF97", 16, 0, mov2_cond, mov0_patch, mov0_applied, true, MAKEHOSVERSION(14,0,0), MAKEHOSVERSION(17,0,1) },
     { "es6a", "0x.6300...0094A0..D1..FF97", 16, 0, mov2_cond, mov0_patch, mov0_applied, true, MAKEHOSVERSION(19,0,0) },
     { "es7", "0x.6F00...0094A0..D1..FF97", 16, 0, mov2_cond, mov0_patch, mov0_applied, true, MAKEHOSVERSION(18,0,0), MAKEHOSVERSION(18,1,0) },
+    { "es7_FW18-19", "0xFF97..132A...A9........FF.0491C0035FD6", 2, 0, mov2_cond, mov0_patch, mov0_applied, true, MAKEHOSVERSION(18,0,0), MAKEHOSVERSION(19,0,0) },
 };
 
 constinit Patterns nifm_patterns[] = {

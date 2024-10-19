@@ -261,8 +261,8 @@ constinit Patterns fs_patterns[] = {
     { "noncasigchk_new2", "0x258052", -5, 0, tbz_cond, nop_patch, nop_applied, true, MAKEHOSVERSION(17,0,0) },
     { "nocntchk_old", "0x081C00121F05007181000054", -4, 0, bl_cond, ret0_patch, ret0_applied, true, MAKEHOSVERSION(10,0,0), MAKEHOSVERSION(14,2,1) },
     { "nocntchk_new", "0x081C00121F05007141010054", -4, 0, bl_cond, ret0_patch, ret0_applied, true, MAKEHOSVERSION(15,0,0) },
-    { "nocntchk_FW19_1", "0xC003005401", 0, 0, bne_cond, ret1_patch, ret1_applied, true, MAKEHOSVERSION(19,0,0) },
-    { "nocntchk_FW19_2", "0x1C0012.050071..0054..00.60", -9, 0, bl_cond, ret0_patch, ret0_applied, true, MAKEHOSVERSION(19,0,0) },
+    { "nocntchk_FW19_1", "0x080340B9091C0012", -4, 0, bl_cond, ret0_patch, ret0_applied, true, MAKEHOSVERSION(19,0,0) },
+    { "nocntchk_FW19_2", "0x02258052e0230191", -4, 0, tbz_cond, nop_patch, nop_applied, true, MAKEHOSVERSION(19,0,0) },
 };
 
 constinit Patterns ldr_patterns[] = {

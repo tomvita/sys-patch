@@ -80,7 +80,7 @@ struct PatchData {
         }
     }
 
-    auto cmp(const void* _data) -> bool {
+    constexpr auto cmp(const void* _data) -> bool {
         return !std::memcmp(data, _data, size);
     }
 
@@ -141,7 +141,8 @@ constexpr auto subr_cond(u32 inst) -> bool {
 }
 
 constexpr auto bl_cond(u32 inst) -> bool {
-    return ((inst >> 26) & 0x3F) == 0x25;
+    const auto type = inst >> 24;
+    return type == 0x25 || type == 0x94;
 }
 
 constexpr auto tbz_cond(u32 inst) -> bool {
@@ -162,11 +163,23 @@ constexpr auto mov_cond(u32 inst) -> bool {
 }
 
 constexpr auto mov2_cond(u32 inst) -> bool {
-    if (hosversionBefore(15,0,0)) {
-        return (inst >> 24) == 0x92; // and x0, x19, #0xffffffff
-    } else {
+     if (hosversionBefore(12,0,0) || !hosversionBefore(15,0,0)) {
         return (inst >> 24) == 0x2A; // mov x0, x20
+    } else {
+        return (inst >> 24) == 0x92; // and x0, x19, #0xffffffff
     }
+}
+
+constexpr auto mov3_cond(u32 inst) -> bool {
+    return (inst >> 24) == 0xD2; // mov x10, #0x3
+}
+
+constexpr auto and_cond(u32 inst) -> bool {
+    return ((inst >> 24) & 0x1F) == 0x0A;
+}
+
+constexpr auto adr_cond(u32 inst) -> bool {
+    return (inst >> 24) == 0x10; // adr x2, LAB
 }
 
 constexpr auto bne_cond(u32 inst) -> bool {
@@ -175,20 +188,43 @@ constexpr auto bne_cond(u32 inst) -> bool {
     return type == 0x54 || cond == 0x0;
 }
 
+constexpr auto beq_cond(u32 inst) -> bool {
+    return (inst >> 24) == 0x54; // beq, 0x710011c94c
+}
+
+constexpr auto str_cond(u32 inst) -> bool {
+    return (inst >> 24) == 0xB9; // str, w8,[x19, #0x15c]
+}
+
 constexpr auto ctest_cond(u32 inst) -> bool {
     return std::byteswap(0xF50301AA) == inst; // mov x21, x1
 }
 
+constexpr auto b_cond(u32 inst) -> bool {
+    const auto type = inst >> 24;
+    return type == 0x14 || type == 0x17;
+}
+
 // to view patches, use https://armconverter.com/?lock=arm64
 constexpr PatchData ret0_patch_data{ "0xE0031F2A" };
+constexpr PatchData ret1_patch_data{ "0x10000014" };
 constexpr PatchData nop_patch_data{ "0x1F2003D5" };
+//mov x0, xzr
 constexpr PatchData mov0_patch_data{ "0xE0031FAA" };
+//mov x2, xzr
+constexpr PatchData mov2_patch_data{ "0xE2031FAA" };
+constexpr PatchData ssl1_patch_data{ "0x0A" };
+constexpr PatchData ssl2_patch_data{ "0x08008052" };
 constexpr PatchData ctest_patch_data{ "0x00309AD2001EA1F2610100D4E0031FAAC0035FD6" };
 
 constexpr auto ret0_patch(u32 inst) -> PatchData { return ret0_patch_data; }
+constexpr auto ret1_patch(u32 inst) -> PatchData { return ret1_patch_data; }
 constexpr auto nop_patch(u32 inst) -> PatchData { return nop_patch_data; }
 constexpr auto subs_patch(u32 inst) -> PatchData { return subi_cond(inst) ? (u8)0x1 : (u8)0x0; }
 constexpr auto mov0_patch(u32 inst) -> PatchData { return mov0_patch_data; }
+constexpr auto mov2_patch(u32 inst) -> PatchData { return mov2_patch_data; }
+constexpr auto ssl1_patch(u32 inst) -> PatchData { return ssl1_patch_data; }
+constexpr auto ssl2_patch(u32 inst) -> PatchData { return ssl2_patch_data; }
 constexpr auto ctest_patch(u32 inst) -> PatchData { return ctest_patch_data; }
 
 constexpr auto b_patch(u32 inst) -> PatchData {
@@ -199,6 +235,10 @@ constexpr auto b_patch(u32 inst) -> PatchData {
 
 constexpr auto ret0_applied(const u8* data, u32 inst) -> bool {
     return ret0_patch(inst).cmp(data);
+}
+
+constexpr auto ret1_applied(const u8* data, u32 inst) -> bool {
+    return ret1_patch(inst).cmp(data);
 }
 
 constexpr auto nop_applied(const u8* data, u32 inst) -> bool {
@@ -221,6 +261,18 @@ constexpr auto mov0_applied(const u8* data, u32 inst) -> bool {
     return mov0_patch(inst).cmp(data);
 }
 
+constexpr auto mov2_applied(const u8* data, u32 inst) -> bool {
+    return mov2_patch(inst).cmp(data);
+}
+
+constexpr auto ssl1_applied(const u8* data, u32 inst) -> bool {
+    return ssl1_patch(inst).cmp(data);
+}
+
+constexpr auto ssl2_applied(const u8* data, u32 inst) -> bool {
+    return ssl2_patch(inst).cmp(data);
+}
+
 constexpr auto ctest_applied(const u8* data, u32 inst) -> bool {
     return ctest_patch(inst).cmp(data);
 }
@@ -228,28 +280,35 @@ constexpr auto ctest_applied(const u8* data, u32 inst) -> bool {
 constinit Patterns fs_patterns[] = {
     { "noacidsigchk1", "0xC8FE4739", -24, 0, bl_cond, ret0_patch, ret0_applied, true, FW_VER_ANY, MAKEHOSVERSION(9,2,0) },
     { "noacidsigchk2", "0x0210911F000072", -5, 0, bl_cond, ret0_patch, ret0_applied, true, FW_VER_ANY, MAKEHOSVERSION(9,2,0) },
-    { "noncasigchk_old", "0x1E42B9", -5, 0, tbz_cond, nop_patch, nop_applied, true, MAKEHOSVERSION(10,0,0), MAKEHOSVERSION(14,2,1) },
-    { "noncasigchk_new", "0x3E4479", -5, 0, tbz_cond, nop_patch, nop_applied, true, MAKEHOSVERSION(15,0,0), MAKEHOSVERSION(16,1,0) },
-    { "noncasigchk_new2", "0x258052", -5, 0, tbz_cond, nop_patch, nop_applied, true, MAKEHOSVERSION(17,0,0) },
-    { "nocntchk_old", "0x081C00121F05007181000054", -4, 0, bl_cond, ret0_patch, ret0_applied, true, MAKEHOSVERSION(10,0,0), MAKEHOSVERSION(14,2,1) },
-    { "nocntchk_new", "0x081C00121F05007141010054", -4, 0, bl_cond, ret0_patch, ret0_applied, true, MAKEHOSVERSION(15,0,0) },
+    { "noncasigchk_old", "0x0036.......71..0054..4839", -2, 0, tbz_cond, nop_patch, nop_applied, true, MAKEHOSVERSION(10,0,0), MAKEHOSVERSION(16,1,0) },
+    { "noncasigchk_new", "0x.94..0036.258052", 2, 0, tbz_cond, nop_patch, nop_applied, true, MAKEHOSVERSION(17,0,0), FW_VER_ANY }, // 17.0.0 - 19.0.0+
+    { "nocntchk", "0x40f9...9408.0012.050071", 2, 0, bl_cond, ret0_patch, ret0_applied, true, MAKEHOSVERSION(10,0,0), MAKEHOSVERSION(18,1,0) },
+    { "nocntchk2", "0x40f9...94..40b9..0012", 2, 0, bl_cond, ret0_patch, ret0_applied, true, MAKEHOSVERSION(19,0,0), FW_VER_ANY },
 };
 
 constinit Patterns ldr_patterns[] = {
-    { "noacidsigchk", "0xFD7BC6A8C0035FD6", 16, 2, subs_cond, subs_patch, subs_applied, true },
+    { "noacidsigchk", "0xFD7B.A8C0035FD6", 16, 2, subs_cond, subs_patch, subs_applied, true, FW_VER_ANY },
 };
 
 constinit Patterns es_patterns[] = {
-    { "es1", "0x1F90013128928052", -4, 0, cbz_cond, b_patch, b_applied, true, FW_VER_ANY, MAKEHOSVERSION(13,2,1) },
-    { "es2", "0xC07240F9E1930091", -4, 0, tbz_cond, nop_patch, nop_applied, true, FW_VER_ANY, MAKEHOSVERSION(10,2,0) },
-    { "es3", "0xF3031FAA02000014", -4, 0, bne_cond, nop_patch, nop_applied, true, FW_VER_ANY, MAKEHOSVERSION(10,2,0) },
-    { "es4", "0xC0FDFF35A8C35838", -4, 0, mov_cond, nop_patch, nop_applied, true, MAKEHOSVERSION(11,0,0), MAKEHOSVERSION(13,2,1) },
-    { "es5", "0xE023009145EEFF97", -4, 0, cbz_cond, b_patch, b_applied, true, MAKEHOSVERSION(11,0,0), MAKEHOSVERSION(13,2,1) },
-    { "es6", "0x.6300...0094A0..D1..FF97", 16, 0, mov2_cond, mov0_patch, mov0_applied, true, MAKEHOSVERSION(14,0,0) },
+    { "es1", "0x..00.....e0.0091..0094..4092...d1", 16, 0, and_cond, mov0_patch, mov0_applied, true, FW_VER_ANY, MAKEHOSVERSION(1,0,0) },
+    { "es2", "0x..00.....e0.0091..0094..4092...a9", 16, 0, and_cond, mov0_patch, mov0_applied, true, MAKEHOSVERSION(2,0,0), MAKEHOSVERSION(8,1,1) },
+    { "es3", "0x..00...0094a0..d1..ff97.......a9", 16, 0, mov2_cond, mov0_patch, mov0_applied, true, MAKEHOSVERSION(9,0,0), FW_VER_ANY }, //9.0.0 - 19.0.0+
 };
 
 constinit Patterns nifm_patterns[] = {
-    { "ctest", "....................F40300AA....F30314AAE00314AA9F0201397F8E04F8", 16, -16, ctest_cond, ctest_patch, ctest_applied, true },
+    { "ctest", "....................F40300AA....F30314AAE00314AA9F0201397F8E04F8", 16, -16, ctest_cond, ctest_patch, ctest_applied, true, FW_VER_ANY, MAKEHOSVERSION(18,1,0) }, // 1.0.0 - 18.1.0
+    { "ctest2", "14...........91...........97...............14", 37, 4, b_cond, ctest_patch, ctest_applied, true, MAKEHOSVERSION(19,0,0), FW_VER_ANY }, //19.0.0 - 20.0.1+
+};
+
+constinit Patterns nim_patterns[] = {
+    { "nim", "0x.0F00351F2003D5", 8, 0, adr_cond, mov2_patch, mov2_applied, true, MAKEHOSVERSION(17,0,0), FW_VER_ANY },
+};
+
+constinit Patterns ssl_patterns[] = {
+    { "disablecaverification1", "0x6A0080D2", 0, 0, mov3_cond, ssl1_patch, ssl1_applied, false, FW_VER_ANY },
+    { "disablecaverification2", "0x2409437AA0000054", 4, 0, beq_cond, ret1_patch, ret1_applied, false, FW_VER_ANY },
+    { "disablecaverification3", "0x88160012", 4, 0, str_cond, ssl2_patch, ssl2_applied, false, FW_VER_ANY },
 };
 
 // NOTE: add system titles that you want to be patched to this table.
@@ -261,6 +320,8 @@ constinit PatchEntry patches[] = {
     // es was added in fw 2
     { "es", 0x0100000000000033, es_patterns, MAKEHOSVERSION(2,0,0) },
     { "nifm", 0x010000000000000F, nifm_patterns },
+    { "nim", 0x0100000000000025, nim_patterns },
+    { "ssl", 0x0100000000000024, ssl_patterns },
 };
 
 struct EmummcPaths {
@@ -355,7 +416,8 @@ auto apply_patch(PatchEntry& patch) -> bool {
 
     u64 pids[0x50]{};
     s32 process_count{};
-    static u8 buffer[READ_BUFFER_SIZE];
+    constexpr u64 overlap_size = 0x4f;
+    static u8 buffer[READ_BUFFER_SIZE + overlap_size];
 
     // skip if version isn't valid
     if (VERSION_SKIP &&
@@ -394,16 +456,27 @@ auto apply_patch(PatchEntry& patch) -> bool {
                     continue;
                 }
 
-                // todo: the byte pattern can in between 2 READ_BUFFER_SIZE boundries!
-                for (u64 sz = 0; sz < mem_info.size; sz += READ_BUFFER_SIZE) {
-                    const auto actual_size = std::min(READ_BUFFER_SIZE, mem_info.size);
-                    if (R_FAILED(svcReadDebugProcessMemory(buffer, handle, mem_info.addr + sz, actual_size))) {
-                        // todo: log failed reads!
+    // u32 overlap_size = 0;
+                // for (const auto& pattern : patch.patterns) {
+                    // overlap_size = std::max(overlap_size, static_cast<u32>(pattern.byte_pattern.size));
+                // }
+                // u8* buffer = (u8*)aligned_alloc(alignof(u8*), READ_BUFFER_SIZE + overlap_size);
+                // if (!buffer) {
+                    // svcCloseHandle(handle);
+                    // return false;
+                // }
+                for (u64 sz = 0; sz < mem_info.size; sz += READ_BUFFER_SIZE - overlap_size) {
+                    const auto actual_size = std::min(READ_BUFFER_SIZE, mem_info.size - sz);
+                    if (R_FAILED(svcReadDebugProcessMemory(buffer + overlap_size, handle, mem_info.addr + sz, actual_size))) {
                         break;
                     } else {
-                        patcher(handle, std::span{buffer, actual_size}, mem_info.addr + sz, patch.patterns);
+                        patcher(handle, std::span{buffer, actual_size + overlap_size}, mem_info.addr + sz - overlap_size, patch.patterns);
+                        if (actual_size >= overlap_size) {
+                            memcpy(buffer, buffer + actual_size, overlap_size);
+                        }
                     }
                 }
+                // free(buffer);
             }
             svcCloseHandle(handle);
             return true;

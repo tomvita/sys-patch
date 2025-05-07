@@ -103,9 +103,8 @@ public:
         list->addItem(config_noacidsigchk2.create_list_item("noacidsigchk2"));
         list->addItem(config_noncasigchk_old.create_list_item("noncasigchk_old"));
         list->addItem(config_noncasigchk_new.create_list_item("noncasigchk_new"));
-        list->addItem(config_noncasigchk_new2.create_list_item("noncasigchk_new2"));
-        list->addItem(config_nocntchk_old.create_list_item("nocntchk_old"));
-        list->addItem(config_nocntchk_new.create_list_item("nocntchk_new"));
+        list->addItem(config_nocntchk.create_list_item("nocntchk"));
+        list->addItem(config_nocntchk2.create_list_item("nocntchk2"));
 
         list->addItem(new tsl::elm::CategoryHeader("LDR - 0100000000000001"));
         list->addItem(config_noacidsigchk.create_list_item("noacidsigchk"));
@@ -114,12 +113,18 @@ public:
         list->addItem(config_es1.create_list_item("es1"));
         list->addItem(config_es2.create_list_item("es2"));
         list->addItem(config_es3.create_list_item("es3"));
-        list->addItem(config_es4.create_list_item("es4"));
-        list->addItem(config_es5.create_list_item("es5"));
-        list->addItem(config_es6.create_list_item("es6"));
 
         list->addItem(new tsl::elm::CategoryHeader("NIFM - 010000000000000F"));
         list->addItem(config_ctest.create_list_item("ctest"));
+        list->addItem(config_ctest2.create_list_item("ctest2"));
+
+        list->addItem(new tsl::elm::CategoryHeader("NIM - 0100000000000025"));
+        list->addItem(config_nim.create_list_item("nim"));
+
+        list->addItem(new tsl::elm::CategoryHeader("Disable CA Verification - apply all"));
+        list->addItem(config_ssl1.create_list_item("disablecaverification1"));
+        list->addItem(config_ssl2.create_list_item("disablecaverification2"));
+        list->addItem(config_ssl3.create_list_item("disablecaverification3"));
 
         frame->setContent(list);
         return frame;
@@ -129,17 +134,18 @@ public:
     ConfigEntry config_noacidsigchk2{"fs", "noacidsigchk2", true};
     ConfigEntry config_noncasigchk_old{"fs", "noncasigchk_old", true};
     ConfigEntry config_noncasigchk_new{"fs", "noncasigchk_new", true};
-    ConfigEntry config_noncasigchk_new2{"fs", "noncasigchk_new2", true};
-    ConfigEntry config_nocntchk_old{"fs", "nocntchk_old", true};
-    ConfigEntry config_nocntchk_new{"fs", "nocntchk_new", true};
+    ConfigEntry config_nocntchk{"fs", "nocntchk", true};
+    ConfigEntry config_nocntchk2{"fs", "nocntchk2", true};
     ConfigEntry config_noacidsigchk{"ldr", "noacidsigchk", true};
     ConfigEntry config_es1{"es", "es1", true};
     ConfigEntry config_es2{"es", "es2", true};
     ConfigEntry config_es3{"es", "es3", true};
-    ConfigEntry config_es4{"es", "es4", true};
-    ConfigEntry config_es5{"es", "es5", true};
-    ConfigEntry config_es6{"es", "es6", true};
-    ConfigEntry config_ctest{"nifm", "ctest", false};
+    ConfigEntry config_ctest{"nifm", "ctest", true};
+    ConfigEntry config_ctest2{"nifm", "ctest2", true};
+    ConfigEntry config_nim{"nim", "nim", true};
+    ConfigEntry config_ssl1{"ssl", "disablecaverification1", false};
+    ConfigEntry config_ssl2{"ssl", "disablecaverification2", false};
+    ConfigEntry config_ssl3{"ssl", "disablecaverification3", false};
 };
 
 class GuiLog final : public tsl::Gui {
